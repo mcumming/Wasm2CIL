@@ -30,7 +30,7 @@ namespace Wasm2CIL {
 			// Incremented by control instructions
 			int curr_label = 0;
 
-			while (/*depth >= 0 && */(reader.BaseStream.Position != reader.BaseStream.Length)) {
+			while (depth >= 0 && (reader.BaseStream.Position != reader.BaseStream.Length)) {
 				WebassemblyInstruction result = null;
 				byte opcode = reader.ReadByte ();
 

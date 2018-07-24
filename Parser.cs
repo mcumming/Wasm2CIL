@@ -427,16 +427,16 @@ namespace Wasm2CIL {
 
 		public void ParseCodeSection (BinaryReader sectionReader)
 		{
-			int count = Convert.ToInt32 (Parser.ParseLEBSigned (sectionReader, 32));
+			int count = Convert.ToInt32 (Parser.ParseLEBUnsigned (sectionReader, 32));
 			exprs = new WebassemblyFunc [count];
 
 			for (int i=0; i < count; i++) {
-				int size_of_entry = Convert.ToInt32 (Parser.ParseLEBSigned (sectionReader, 32));
+				int size_of_entry = Convert.ToInt32 (Parser.ParseLEBUnsigned (sectionReader, 32));
 				// doing now so I can parallelize lower parsing later
 				byte [] entry = sectionReader.ReadBytes (size_of_entry);
 
 				using (BinaryReader bodyReader = new BinaryReader (new MemoryStream (entry))) {
-					exprs [i] = new WebassemblyFunc (bodyReader);
+                    exprs[i] = new WebassemblyFunc (bodyReader);
 				}
 			}
 
@@ -467,7 +467,7 @@ namespace Wasm2CIL {
 
 		public void ParseGlobalSection(BinaryReader reader)
 		{
-			var count = Convert.ToInt32 (Parser.ParseLEBSigned (reader, 32));
+			var count = Convert.ToInt32 (Parser.ParseLEBUnsigned (reader, 32));
 			this.globals = new WebassemblyGlobal [count];
 
 			for (int i=0; i < count; i++)
@@ -665,6 +665,7 @@ namespace Wasm2CIL {
 							// Process section
 							// asynchronously parse?
 							parser.ParseSection (id, this_section);
+
 						}
 
 						parser.Emit (outputName);
